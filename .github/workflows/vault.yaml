@@ -16,6 +16,7 @@ jobs:
           method: approle
           roleId: ${{ secrets.VAULT_ROLE_ID }}
           secretId: ${{ secrets.VAULT_SECRET_ID }}
+          namespace: admin
           secrets: |
             secret/test/webApp Name | NAME
             # export FAMNAME={{secret "secret/test/webApp" "FamName"}}
