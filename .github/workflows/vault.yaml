@@ -13,9 +13,7 @@ jobs:
         uses: hashicorp/vault-action@v2
         with:
           url: ${{ secrets.VAULT_URL }}
-          method: approle
-          roleId: ${{ secrets.VAULT_ROLE_ID }}
-          secretId: ${{ secrets.VAULT_SECRET_ID }}
+          token: ${{ secrets.VAULT_TOKEN }}
           namespace: admin
           secrets: |
             secret/test/webApp Name | NAME
