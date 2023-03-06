@@ -1,6 +1,9 @@
 name: Vault secrets example
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   get-secrets:
@@ -16,10 +19,26 @@ jobs:
           token: ${{ secrets.VAULT_TOKEN }}
           namespace: admin
           secrets: |
-            secret/data/test/webApp Name | NAME ;
-            secret/data/test/webApp FamName | FAMNAME ;
+            secret/data/test/webApp AWS_ID | AWS_ID ;
+            secret/data/test/webApp AWS_KEY | AWS_KEY ;
 
-      - name: Use secrets as environment variables
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: '${{ env.AWS_ID }}'
+          aws-secret-access-key: '${{ env.AWS_KEY }}'
+          aws-region: eu-west-3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+      - name: Terraform Apply
+        id:   apply
+        env:
+          TF_VAR_ec2_name:  "Test_pipeline"
         run: |
-          echo $NAME
-          echo $FAMNAME
+          cd infra/
+          terraform init
+          terraform validate
+          terraform plan 
+          terraform apply -auto-approve
