@@ -17,7 +17,7 @@ jobs:
           namespace: admin
           secrets: |
             secret/data/test/webApp Name | NAME ;
-            secret/data/test/webApp famName | FAMNAME ;
+            secret/data/test/webApp FamName | FAMNAME ;
 
       - name: Use secrets as environment variables
         run: |
