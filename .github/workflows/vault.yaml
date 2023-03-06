@@ -1,0 +1,26 @@
+name: Vault secrets example
+
+on: [push]
+
+jobs:
+  get-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get secrets from Vault
+        uses: hashicorp/vault-action@v2
+        with:
+          url: ${{ secrets.VAULT_URL }}
+          method: approle
+          role_id: ${{ secrets.VAULT_ROLE_ID }}
+          secret_id: ${{ secrets.VAULT_SECRET_ID }}
+          secrets: |
+            export NAME={{secret "secret/test/webApp" "Name"}}
+            export FAMNAME={{secret "secret/test/webApp" "FamName"}}
+
+      - name: Use secrets as environment variables
+        run: |
+          echo $NAME
+          echo $FAMNAME
