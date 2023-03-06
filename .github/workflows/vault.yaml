@@ -13,7 +13,6 @@ jobs:
         uses: hashicorp/vault-action@v2
         with:
           url: ${{ secrets.VAULT_URL }}
-          method: approle
           token: ${{ secrets.VAULT_TOKEN }}
           secrets: |
             secret/test/webApp Name | NAME
