@@ -16,7 +16,7 @@ jobs:
           token: ${{ secrets.VAULT_TOKEN }}
           namespace: admin
           secrets: |
-            secret/test/webApp Name | NAME
+            secret/data/test/webApp Name | NAME ;
             # export FAMNAME={{secret "secret/test/webApp" "FamName"}}
 
       - name: Use secrets as environment variables
