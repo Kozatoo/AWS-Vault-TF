@@ -17,7 +17,7 @@ jobs:
           namespace: admin
           secrets: |
             secret/data/test/webApp Name | NAME ;
-            # export FAMNAME={{secret "secret/test/webApp" "FamName"}}
+            secret/data/test/webApp famName | FAMNAME ;
 
       - name: Use secrets as environment variables
         run: |
