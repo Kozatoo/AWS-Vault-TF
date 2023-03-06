@@ -17,7 +17,7 @@ jobs:
           role_id: ${{ secrets.VAULT_ROLE_ID }}
           secret_id: ${{ secrets.VAULT_SECRET_ID }}
           secrets: |
-            export NAME={{secret "secret/test/webApp" "Name"}}
+            secret/test/webApp Name | NAME
             # export FAMNAME={{secret "secret/test/webApp" "FamName"}}
 
       - name: Use secrets as environment variables
