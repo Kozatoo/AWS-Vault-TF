@@ -56,7 +56,6 @@ jobs:
 
       - name: Terraform Apply
         id:   apply
-        env:
         run: |
           cd sit/
           terraform init
