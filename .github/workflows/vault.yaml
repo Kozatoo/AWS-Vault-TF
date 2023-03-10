@@ -57,7 +57,6 @@ jobs:
       - name: Terraform Apply
         id:   apply
         env:
-          TF_VAR_ec2_name:  "Test_pipeline"
         run: |
           cd sit/
           terraform init
