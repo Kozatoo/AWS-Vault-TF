@@ -1,13 +1,26 @@
-name: Vault secrets example
+name: Sit provisioning pipeline
 
 on:
   push:
     branches:
       - main
 
-jobs:
-  get-secrets:
+jobs:  
+  scan-terraform-config:
     runs-on: ubuntu-latest
+    name: Scan Terraform with Checov
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@master
+
+      - name: Run Checkov Scan
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ./sit/
+  provisioning:
+    runs-on: ubuntu-latest
+    needs: [scan-terraform-config]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -17,28 +30,30 @@ jobs:
         with:
           url: ${{ secrets.VAULT_URL }}
           token: ${{ secrets.VAULT_TOKEN }}
-          namespace: admin
-          secrets: |
-            secret/data/test/webApp AWS_ID | AWS_ID ;
-            secret/data/test/webApp AWS_KEY | AWS_KEY ;
+          namespace: model-convertor
+          secrets: secret/data/kv/terraform-vars sit | TF_VARIABLES 
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Create variables file
+        run: echo $TF_VARIABLES > ./sit/secrets.tfvars
+
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
         with:
-          aws-access-key-id: '${{ env.AWS_ID }}'
-          aws-secret-access-key: '${{ env.AWS_KEY }}'
-          aws-region: eu-west-3
+          workload_identity_provider: ${{ secrets.wip}}
+          service_account: ${{ secrets.service_account }}
+      
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_wrapper: false
+
       - name: Terraform Apply
         id:   apply
         env:
           TF_VAR_ec2_name:  "Test_pipeline"
         run: |
-          cd infra/
+          cd sit/
           terraform init
-          terraform validate
+          terraform validate 
           terraform plan 
-          terraform apply -auto-approve
+          terraform apply -auto-approve -var-file=./secrets.tfvars
