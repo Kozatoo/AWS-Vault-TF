@@ -35,7 +35,7 @@ jobs:
           secrets: secret/data/kv/terraform-vars sit | TF_VARIABLES 
 
       - name: Create variables file
-        run: echo $TF_VARIABLES > ./sit/secrets.tfvars
+        run: echo -e $TF_VARIABLES > ./sit/secrets.tfvars
 
       # - name: 'Authenticate to Google Cloud'
       #   uses: 'google-github-actions/auth@v1'
