@@ -18,7 +18,7 @@ provider "aws" {
 resource "aws_instance" "app_server" {
   ami           = data.aws_ami.web.id
   instance_type = "t2.micro"
-  key_name      = "cleServeur"
+  key_name      = var.ec2_key_name
   tags = {
     Name = var.ec2_name
   }
