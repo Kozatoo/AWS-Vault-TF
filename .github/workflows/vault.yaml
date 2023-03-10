@@ -60,5 +60,5 @@ jobs:
           cd sit/
           terraform init
           terraform validate 
-          terraform plan 
+          terraform plan -var-file=./secrets.tfvars
           terraform apply -auto-approve -var-file=./secrets.tfvars
