@@ -31,7 +31,7 @@ jobs:
         with:
           url: ${{ secrets.VAULT_URL }}
           token: ${{ secrets.VAULT_TOKEN }}
-          namespace: model-convertor
+          namespace: admin
           secrets: secret/data/kv/terraform-vars sit | TF_VARIABLES 
 
       - name: Create variables file
