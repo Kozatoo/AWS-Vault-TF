@@ -32,10 +32,15 @@ jobs:
           url: ${{ secrets.VAULT_URL }}
           token: ${{ secrets.VAULT_TOKEN }}
           namespace: admin
-          secrets: secret/data/kv/terraform-vars sit | tr '\n' ';' | TF_VARIABLES 
+          secrets: secret/data/kv/terraform-vars sit | TF_VARIABLES 
 
       - name: Create variables file
-        run: echo -e $TF_VARIABLES | tr ';' '\n' > ./sit/secrets.tfvars
+        run: |
+          echo $TF_VARIABLES
+          echo $TF_VARIABLES | tr '\n' ';'
+          echo -e $TF_VARIABLES | tr ';' '\n' > ./sit/secrets.tfvars
+          echo $
+
 
       # - name: 'Authenticate to Google Cloud'
       #   uses: 'google-github-actions/auth@v1'
